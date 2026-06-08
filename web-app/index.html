@@ -1,9 +1,60 @@
 <!-- In HTML Comments are written like this -->
 <!-- They can all be removed for your apps -->
-<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
-<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
-<meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
-<title>Your Web-app Title</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
+<!doctype html>
+<html lang="en-gb">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanafuda Koi-Koi</title>
 <link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
 <link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
 <script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+    
+    <!-- Add Google Font -->
+     <link href="https://fonts.googleapis.com/css2?family=Sankofa+Display&display=swap" rel="stylesheet">
+     <!-- Add Google Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Add Google Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+
+<body>
+    <header>
+        <h1>Hanafuda</h1>
+        <h2>Hana . fuda = flower card <img src="assets/petal-icon.svg" class="petal-icon"></h2>
+        
+    </header>
+    
+    <aside>
+        <a1>Player Guide</a1>
+        <button id="new-game-button">New Game</button>
+        <button id="end-turn-button">End Turn</button>
+    </aside>
+
+    <main>
+        <!-- Player 1 captured area (left side) -->
+        <div class="player-capture-area" id="player1-area">
+            <h3 id="player1-name">Player 1's Cards</h3>
+            <div id="player1-captured"></div>
+        </div>
+        
+        <!-- Player 2 captured area (right side) -->
+        <div class="player-capture-area" id="player2-area">
+            <h3 id="player2-name">Player 2's Cards</h3>
+            <div id="player2-captured"></div>
+        </div>
+
+        <!-- Clickable deck pile -->
+        <img src="assets/card-back.svg" id="deck-pile" class="card-back">
+
+        <!-- Field Cards Grid -->
+         <div id="field-cards"></div>
+        
+         <!-- Player 1 hand (bottom) -->
+        <div id="player1-hand" class="player-hand"></div>
+        
+        <!-- Player 2 hand (top) -->
+         <div id="player2-hand" class="player-hand"></div>
+
+    </main>
+
+</body>
+</html> 

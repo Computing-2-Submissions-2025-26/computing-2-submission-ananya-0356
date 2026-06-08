@@ -1,0 +1,229 @@
+:root
+{
+    --border-width: 100px;
+    --game-height: 50px;
+    --header-thickness: 10%;
+    --right-position: 2.5%;
+    --bottom-border: 100px;
+    --title-position: 1%;
+    --header-left-alignment: 40px;
+    --aside-width: 15%;
+    --game-height: calc(100% - var(--header-thickness) - var(--bottom-border));
+}
+
+body 
+{
+
+    background-color: #6b6660
+}
+        
+header 
+{
+    font-family: 'Inika', serif;
+    padding: 5%;
+    border-style: hidden;
+    border-width: thick;
+    color: #fff;
+}
+
+h1 {
+    font-family: 'Inika', serif;
+    font-size: 64px; 
+    position: absolute;
+    top: var(--title-position); 
+    left: var(--header-left-alignment); 
+    margin: 0;
+}
+
+h2 {
+    font-family: 'Inika', serif;
+    font-size: 24px;
+    font-style: italic;
+    color: #fff;
+    position: absolute;
+    top: calc(var(--title-position) + 6%); 
+    left: var(--header-left-alignment); 
+}
+
+.petal-icon {
+    width: 20px; /* Adjust size */
+    height: auto;
+    vertical-align: middle; /* Aligns with text */
+    margin-left: 5px; /* Space from text */
+    position: relative;
+    top: -10px;
+}
+
+aside
+{ 
+    background-color: #222;
+    height: calc(100% - var(--header-thickness) - var(--bottom-border));
+    width: var(--aside-width);
+    position: absolute;
+    right: var(--right-position);
+    top: 14%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+a1 {
+    color: #fff;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#new-game-button {
+    background-color: #f7c7c7;
+    color: #000000;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 2px white;
+    border-radius: 25px; /* Very curved - increase for more curve! */
+    cursor: pointer;
+    margin-top: 15%;
+}
+
+#new-game-button:hover {
+    background-color: #ee8b8b;
+}
+
+#end-turn-button {
+    appearance: none;
+    background-color: #f7c7c7;
+    color: #000000;
+    font-family: 'Kaushan Script', cursive !important;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+#end-turn-button:hover {
+    background-color: #ee8b8b;
+}
+main 
+{ 
+    background-color: aqua;
+    height: calc(100% - var(--header-thickness) - var(--bottom-border));
+    width:  calc(100% - var(--aside-width) - var(--header-left-alignment) - var(--right-position));
+    position: absolute;
+    left: var(--header-left-alignment); 
+    top: 14%;
+
+    /* Add the tatami mat as background */
+    background-image: url('assets/Tatami-Mat.svg');
+    background-size: cover; /* Scales to fill main */
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+}
+
+.player-capture-area {
+    position: absolute;
+    background-color: #8B0000;
+    width: 10%;
+    height: 76%; /* 100% - 14% (top) - 10% (bottom border approx) */
+    top: 14%;
+    padding: 10px 5px;
+    z-index: 2;
+    display: none;
+}
+
+#player1-area {
+    left: 1%;
+}
+
+#player2-area {
+    right: 1%;
+}
+
+.player-capture-area h3 {
+    color: white;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 20px;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.card-back {
+    position: absolute;
+    width: 18%; /* Use fixed pixels first to test */
+    height: 19%;
+    top: 40%;
+    left: 13%;
+    cursor: pointer;
+    z-index: 3;
+    display: none;
+    object-fit: contain; /* Forces the image to scale within the box */
+}
+
+.card-back:hover {
+    transform: scale(1.05);
+}
+
+#field-cards {
+    position: absolute;
+    top: 25%;
+    left: 27%;
+    width: 45%;
+    aspect-ratio: 5 / 2;  /* Maintains 5x2 proportion */
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2%;
+    z-index: 2;
+    }
+
+#field-cards img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+#field-cards img:hover {
+    transform: scale(1.1);
+}
+
+.player-hand {
+    position: absolute;
+    width: 75%;
+    left: 20%;
+    aspect-ratio: 8 / 1;
+    display: flex;
+    gap: 40%;  /* CHANGED from 15px to 3% */
+    z-index: 2;
+}
+
+#player1-hand {
+    bottom: 1%;
+}
+
+#player2-hand {
+    bottom: 1%;
+}
+
+.player-hand img {
+    flex: 1 1 auto;  
+    width: 10%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    min-width: 50px; 
+    transform: scale(1.05);
+}
+
+.player-hand img:hover {
+    transform: scale(1.2);
+}
