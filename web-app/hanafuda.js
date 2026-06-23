@@ -1,16 +1,11 @@
-//import R from "./ramda.js";
-
-//Hanafuda Game Module
-//Pure Functions for game logic, game state and scoring.
+import R from "./ramda.js";
 
 /**
- * Shuffles a deck of cards using Fisher-Yates learnt from
- * https://www.freecodecamp.org/news/how-to-shuffle-an-array
- * -of-items-using-javascript-or-typescript/
+ * Shuffles a deck of cards using Fisher-Yates algorithm.
+ * Pure function - returns new array, doesn't modify input.
  * @param {Array} cards - Array of card objects to shuffle
- * @returns {Array} New shuffled array (original unchanged)
+ * @returns {Array} New shuffled deck
  */
-
 function shuffleDeck(cards) {
     const deck = [...cards];
     let i = deck.length - 1;
@@ -24,41 +19,71 @@ function shuffleDeck(cards) {
 }
 
 /**
- * Deals cards from deck to players and field.
- * @param {Array} deck - Shuffled deck of 48 cards
+ * Deals cards from shuffled deck to players and field.
+ * Divides 48-card deck into 8 + 8 + 8 + 24 distribution.
+ * @param {Array} deck - Shuffled deck of cards
  * @returns {Object} Contains player1Hand, player2Hand,
  * fieldCards, remainingDeck
  */
-
 function dealCards(deck) {
     return {
-        player1Hand: deck.slice(0, 8),
-        player2Hand: deck.slice(8, 16),
-        fieldCards: deck.slice(16, 24),
-        remainingDeck: deck.slice(24)
+        player1Hand: R.slice(0, 8, deck),
+        player2Hand: R.slice(8, 16, deck),
+        fieldCards: R.slice(16, 24, deck),
+        remainingDeck: R.slice(24, Infinity, deck)
     };
 }
 
-// Game state holds all game data in one place
-const gameState = {
-    deck: [],
-    fieldCards: [],
-    player1: {
-        name: "Player 1",
-        hand: [],
-        captured: [],
-        score: 0
-    },
-    player2: {
-        name: "Player 2",
-        hand: [],
-        captured: [],
-        score: 0
-    },
-    currentPlayer: 1,
-    gameOver: false,
-    winner: null
-};
+/**
+ * Checks if card has red poetry slip tag.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if has "red poetry slips" tag
+ */
+function isRedPoetrySlip(card) {
+    return R.includes(
+        "red poetry slips",
+        R.defaultTo([], R.prop("tags", card))
+    );
+}
+
+/**
+ * Checks if card has blue poetry slip tag.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if has "blue poetry slips" tag
+ */
+function isBluePoetrySlip(card) {
+    return R.includes(
+        "blue poetry slips",
+        R.defaultTo([], R.prop("tags", card))
+    );
+}
+
+/**
+ * Checks if card is poetry slip category.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if category is "poetry slips"
+ */
+function isPoetrySlip(card) {
+    return R.propEq("category", "poetry slips", card);
+}
+
+/**
+ * Checks if card is seed category.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if category is "seeds"
+ */
+function isSeed(card) {
+    return R.propEq("category", "seeds", card);
+}
+
+/**
+ * Checks if card is chaff category.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if category is "chaff"
+ */
+function isChaff(card) {
+    return R.propEq("category", "chaff", card);
+}
 
 /**
  * Counts red poetry slip cards in captured cards.
@@ -66,21 +91,7 @@ const gameState = {
  * @returns {number} Count of red poetry slip cards
  */
 function countRedPoetrySlips(capturedCards) {
-    let count = 0;
-    let i = 0;
-
-    while (i < capturedCards.length) {
-        if (
-            capturedCards[i].tags
-            &&
-            capturedCards[i].tags.includes("red poetry slips")
-        ) {
-            count = count + 1;
-        }
-        i = i + 1;
-    }
-
-    return count;
+    return R.length(R.filter(isRedPoetrySlip, capturedCards));
 }
 
 /**
@@ -89,87 +100,61 @@ function countRedPoetrySlips(capturedCards) {
  * @returns {number} Count of blue poetry slip cards
  */
 function countBluePoetrySlips(capturedCards) {
-    let count = 0;
-    let i = 0;
-
-    while (i < capturedCards.length) {
-        if (
-            capturedCards[i].tags
-            &&
-            capturedCards[i].tags.includes("blue poetry slips")
-        ) {
-            count = count + 1;
-        }
-        i = i + 1;
-    }
-
-    return count;
+    return R.length(R.filter(isBluePoetrySlip, capturedCards));
 }
 
 /**
- * Counts all poetry slip cards in captured cards.
+ * Counts all poetry slip category cards in captured cards.
  * @param {Array} capturedCards - Cards the player has captured
  * @returns {number} Count of poetry slip category cards
  */
 function countPoetrySlips(capturedCards) {
-    let count = 0;
-    let i = 0;
-
-    while (i < capturedCards.length) {
-        if (capturedCards[i].category === "poetry slips") {
-            count = count + 1;
-        }
-        i = i + 1;
-    }
-
-    return count;
+    return R.length(R.filter(isPoetrySlip, capturedCards));
 }
 
 /**
- * Counts seed cards in captured cards.
+ * Counts seed category cards in captured cards.
  * @param {Array} capturedCards - Cards the player has captured
  * @returns {number} Count of seed category cards
  */
 function countSeeds(capturedCards) {
-    let count = 0;
-    let i = 0;
-
-    while (i < capturedCards.length) {
-        if (capturedCards[i].category === "seeds") {
-            count = count + 1;
-        }
-        i = i + 1;
-    }
-
-    return count;
+    return R.length(R.filter(isSeed, capturedCards));
 }
 
 /**
- * Checks if player has Ino-Shika-Cho yaku (boar, deer, butterfly).
+ * Counts chaff category cards in captured cards.
  * @param {Array} capturedCards - Cards the player has captured
- * @returns {boolean} True if player has all three animal cards
+ * @returns {number} Count of chaff category cards
  */
-function checkInoShikaCho(capturedCards) {
+function countChaff(capturedCards) {
+    return R.length(R.filter(isChaff, capturedCards));
+}
+
+/**
+ * Checks if player has all three animal cards: boar, deer, butterfly.
+ * Ino-Shika-Cho yakusu combination.
+ * @param {Array} cards - Captured cards to check
+ * @returns {boolean} True if has all three animals
+ */
+function checkInoShikaCho(cards) {
     let hasBoar = false;
     let hasDeer = false;
     let hasButterfly = false;
     let i = 0;
 
-    while (i < capturedCards.length) {
-        const card = capturedCards[i];
-
+    while (i < cards.length) {
+        const card = cards[i];
         if (card.tags) {
-            if (card.tags.includes("boar")) {
+            if (R.includes("boar", card.tags)) {
                 hasBoar = true;
             }
-            if (card.tags.includes("deer")) {
+            if (R.includes("deer", card.tags)) {
                 hasDeer = true;
             }
-            if (card.tags.includes("butterfly")) {
+            if (R.includes("butterfly", card.tags)) {
                 hasButterfly = true;
             }
         }
-
         i = i + 1;
     }
 
@@ -177,38 +162,20 @@ function checkInoShikaCho(capturedCards) {
 }
 
 /**
- * Counts chaff cards in captured cards.
- * @param {Array} capturedCards - Cards the player has captured
- * @returns {number} Count of chaff category cards
- */
-function countChaff(capturedCards) {
-    let count = 0;
-    let i = 0;
-
-    while (i < capturedCards.length) {
-        if (capturedCards[i].category === "chaff") {
-            count = count + 1;
-        }
-        i = i + 1;
-    }
-
-    return count;
-}
-
-/**
- * Calculates total score for a player based on captured cards.
- * Red/Blue Poetry Slips: 3+ cards = 3 points + 1 per extra
- * Poetry Slips: 5+ cards = 5 points + 1 per extra
- * @param {Array} capturedCards - Cards the player has captured
+ * Calculates total score from captured cards.
+ * Scoring: Red Poetry 3+ (3+1 per extra), Blue Poetry 3+ (3+1 per extra),
+ * Poetry Slips 5+ (5+1 per extra), Seeds 5+ (5+1 per extra),
+ * Ino-Shika-Cho (5), Chaff 10+ (1).
+ * @param {Array} cards - Player's captured cards
  * @returns {number} Total points scored
  */
-function calculateScore(capturedCards) {
+function calculateScore(cards) {
     let totalPoints = 0;
-    let redCount = countRedPoetrySlips(capturedCards);
-    let blueCount = countBluePoetrySlips(capturedCards);
-    let poetryCount = countPoetrySlips(capturedCards);
-    let seedCount = countSeeds(capturedCards);
-    let chaffCount = countChaff(capturedCards);
+    let redCount = countRedPoetrySlips(cards);
+    let blueCount = countBluePoetrySlips(cards);
+    let poetryCount = countPoetrySlips(cards);
+    let seedCount = countSeeds(cards);
+    let chaffCount = countChaff(cards);
 
     if (redCount >= 3) {
         totalPoints = totalPoints + 3 + (redCount - 3);
@@ -226,7 +193,7 @@ function calculateScore(capturedCards) {
         totalPoints = totalPoints + 5 + (seedCount - 5);
     }
 
-    if (checkInoShikaCho(capturedCards)) {
+    if (checkInoShikaCho(cards)) {
         totalPoints = totalPoints + 5;
     }
 
@@ -238,23 +205,136 @@ function calculateScore(capturedCards) {
 }
 
 /**
- * Finds cards on the field that match a player's card by month.
- * @param {Object} playerCard - Card object from player's hand
- * @param {Array} fieldCards - Cards currently on the field
- * @returns {Array} Array of matching cards on field
+ * Finds field card matching hand card by month.
+ * Returns first match or null if no match exists.
+ * @param {Object} handCard - Player's card to match
+ * @param {Array} fieldCards - Cards currently on field
+ * @returns {Object|null} Matching field card or null
  */
-function findMatchingCards(playerCard, fieldCards) {
-    let matches = [];
-    let i = 0;
-
-    while (i < fieldCards.length) {
-        if (fieldCards[i].month === playerCard.month) {
-            matches.push(fieldCards[i]);
-        }
-        i = i + 1;
-    }
-
-    return matches;
+function findMatchingFieldCard(handCard, fieldCards) {
+    const handMonth = R.prop("month", handCard);
+    const predicate = function (card) {
+        return R.propEq("month", handMonth, card);
+    };
+    return R.find(predicate, fieldCards) || null;
 }
 
-export {shuffleDeck, dealCards, calculateScore};
+/**
+ * Removes card by id from array.
+ * Returns new array without the card.
+ * @param {string} cardId - Card id to remove
+ * @param {Array} cards - Array to remove from
+ * @returns {Array} New array without card
+ */
+function removeCardById(cardId, cards) {
+    const predicate = function (card) {
+        return !R.propEq("id", cardId, card);
+    };
+    return R.filter(predicate, cards);
+}
+
+/**
+ * Draws top card from deck.
+ * Returns first card or null if deck is empty.
+ * @param {Array} deck - Current deck
+ * @returns {Object|null} Top card or null
+ */
+function drawDeckCard(deck) {
+    if (R.isEmpty(deck)) {
+        return null;
+    }
+    return R.head(deck);
+}
+
+/**
+ * Gets completed yaku with point values.
+ * Returns array of {name, points} for each achieved yakusu.
+ * @param {Array} cards - Player's captured cards
+ * @returns {Array} Array of {name, points} objects
+ */
+function getCompletedYaku(cards) {
+    let yaku = [];
+
+    let redCount = countRedPoetrySlips(cards);
+    if (redCount >= 3) {
+        yaku = R.append(
+            {
+                name: "Red Poetry Slips",
+                points: 3 + (redCount - 3)
+            },
+            yaku
+        );
+    }
+
+    let blueCount = countBluePoetrySlips(cards);
+    if (blueCount >= 3) {
+        yaku = R.append(
+            {
+                name: "Blue Poetry Slips",
+                points: 3 + (blueCount - 3)
+            },
+            yaku
+        );
+    }
+
+    let poetryCount = countPoetrySlips(cards);
+    if (poetryCount >= 5) {
+        yaku = R.append(
+            {
+                name: "Poetry Slips",
+                points: 5 + (poetryCount - 5)
+            },
+            yaku
+        );
+    }
+
+    let seedCount = countSeeds(cards);
+    if (seedCount >= 5) {
+        yaku = R.append(
+            {
+                name: "Seeds",
+                points: 5 + (seedCount - 5)
+            },
+            yaku
+        );
+    }
+
+    if (checkInoShikaCho(cards)) {
+        yaku = R.append(
+            {
+                name: "Ino-Shika-Cho",
+                points: 5
+            },
+            yaku
+        );
+    }
+
+    let chaffCount = countChaff(cards);
+    if (chaffCount >= 10) {
+        yaku = R.append(
+            {
+                name: "Chaff",
+                points: 1
+            },
+            yaku
+        );
+    }
+
+    return yaku;
+}
+
+export {
+    shuffleDeck,
+    dealCards,
+    calculateScore,
+    countRedPoetrySlips,
+    countBluePoetrySlips,
+    countPoetrySlips,
+    countSeeds,
+    countChaff,
+    checkInoShikaCho,
+    findMatchingFieldCard,
+    removeCardById,
+    drawDeckCard,
+    getCompletedYaku
+};
