@@ -164,7 +164,6 @@ deckPile.addEventListener("click", function() {
 
 const endTurnButton = document.getElementById("end-turn-button");
 
-endTurnButton.addEventListener("click", function() {
     if (gameState.currentPlayer === 1) {
         gameState.currentPlayer = 2;
     } else {

@@ -163,20 +163,12 @@ function checkInoShikaCho(cards) {
 
 /**
  * Calculates total score from captured cards.
- * Scoring: Red Poetry 3+ (3+1 per extra), Blue Poetry 3+ (3+1 per extra),
- * Poetry Slips 5+ (5+1 per extra), Seeds 5+ (5+1 per extra),
- * Ino-Shika-Cho (5), Chaff 10+ (1).
  * @param {Array} cards - Player's captured cards
  * @returns {number} Total points scored
  */
 function calculateScore(cards) {
     let totalPoints = 0;
     let redCount = countRedPoetrySlips(cards);
-    let blueCount = countBluePoetrySlips(cards);
-    let poetryCount = countPoetrySlips(cards);
-    let seedCount = countSeeds(cards);
-    let chaffCount = countChaff(cards);
-
     if (redCount >= 3) {
         totalPoints = totalPoints + 3 + (redCount - 3);
     }
