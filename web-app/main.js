@@ -65,6 +65,7 @@ function renderFieldCards() {
         const cardImg = document.createElement("img");
         cardImg.src = card.image;
         cardImg.alt = card.id;
+        cardImg.title = card.name;
         cardImg.className = "field-card";
         fieldContainer.appendChild(cardImg);
         i = i + 1;
@@ -87,6 +88,7 @@ function renderPlayer1Hand() {
         const cardImg = document.createElement("img");
         cardImg.src = card.image;
         cardImg.alt = card.id;
+        cardImg.title = card.name;
         cardImg.className = "player1-card";
         player1HandContainer.appendChild(cardImg);
         i = i + 1;
@@ -103,6 +105,7 @@ function renderPlayer2Hand() {
         const cardImg = document.createElement("img");
         cardImg.src = card.image;
         cardImg.alt = card.id;
+        cardImg.title = card.name;
         cardImg.className = "player2-card";
         player2HandContainer.appendChild(cardImg);
         i = i + 1;
@@ -422,6 +425,7 @@ function renderCapturedCards() {
     while (i < gameState.player2.captured.length) {
         const img = document.createElement("img");
         img.src = gameState.player2.captured[i].image;
+        img.title = gameState.player1.captured[i].name;
         img.style.width = "20%";
         img.style.margin = "2%";
         p2Captured.appendChild(img);
@@ -565,4 +569,34 @@ koikoiBtn.addEventListener("click", function() {
 
 finishBtn.addEventListener("click", function() {
     handleFinish();
+});
+
+const howToPlayBtn = document.getElementById("how-to-play-btn");
+const yakuReferenceBtn = document.getElementById("yaku-reference-btn");
+const howtoplayModal = document.getElementById("howtoplay-modal");
+const yakusModal = document.getElementById("yakus-modal");
+
+howToPlayBtn.addEventListener("click", function() {
+    if (howtoplayModal.style.display === "none" ||
+        howtoplayModal.style.display === "") {
+        howtoplayModal.style.display = "flex";
+    } else {
+        howtoplayModal.style.display = "none";
+    }
+});
+
+yakuReferenceBtn.addEventListener("click", function() {
+    if (yakusModal.style.display === "none" ||
+        yakusModal.style.display === "") {
+        yakusModal.style.display = "flex";
+    } else {
+        yakusModal.style.display = "none";
+    }
+});
+
+document.querySelectorAll(".close-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+        howtoplayModal.style.display = "none";
+        yakusModal.style.display = "none";
+    });
 });

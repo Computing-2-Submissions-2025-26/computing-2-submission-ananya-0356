@@ -19,7 +19,7 @@
 <body>
     <header>
         <h1>Hanafuda</h1>
-        <h2>Hana . fuda = flower card <img src="assets/petal-icon.svg" class="petal-icon"></h2>
+        <h2>Hana . fuda = flower card <img src="assets/petal-icon.svg" class="petal-icon" alt="" role="presentation"></h2>
         
     </header>
     
@@ -28,6 +28,9 @@
         <button id="new-game-button">New Game</button>
         <button id="end-turn-button">End Turn</button>
         <button id="pass-button">Pass</button>
+        <button id="how-to-play-btn">How to Play</button>
+        <button id="yaku-reference-btn">Yaku Reference</button>
+        
     </aside>
 
     <main>
@@ -44,7 +47,7 @@
         </div>
 
         <!-- Clickable deck pile -->
-        <img src="assets/card-back.svg" id="deck-pile" class="card-back">
+        <img src="assets/card-back.svg" id="deck-pile" class="card-back" alt="Deck pile" style="display: block;">
 
         <!-- Field Cards Grid -->
          <div id="field-cards"></div>
@@ -57,7 +60,21 @@
 
          <img id="floating-drawn-card" src="" alt="drawn card">
     </main>
-
+    
+    <div id="howtoplay-modal" style="display: none;">
+        <div id="howtoplay-content">
+        <img src="assets/howtoplay.svg" alt="How to Play">
+        <button class="close-btn">Close</button>
+        </div>
+        </div>
+        
+        <div id="yakus-modal" style="display: none;">
+        <div id="yakus-content">
+        <img src="assets/Yakus.svg" alt="Yakus">
+        <button class="close-btn">Close</button>
+        </div>
+        </div>
+        
     <div id="koikoi-modal" style="display: none;">
         <div id="koikoi-content">
             <h2>Yaku Complete!</h2>
