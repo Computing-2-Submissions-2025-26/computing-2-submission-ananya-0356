@@ -111,6 +111,29 @@ a1 {
 #end-turn-button:hover {
     background-color: #ee8b8b;
 }
+
+#pass-button {
+    appearance: none;
+    background-color: #f7c7c7;
+    color: #000000;
+    font-family: 'Kaushan Script', cursive !important;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 2px solid white;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 25px;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+#pass-button:hover {
+    background-color: #ee8b8b;
+}
+
+#end-turn-button, #pass-button {
+    display: none;  /* Hidden by default */
+}
 main 
 { 
     background-color: aqua;
@@ -226,4 +249,75 @@ main
 
 .player-hand img:hover {
     transform: scale(1.2);
+}
+
+#floating-drawn-card {
+    position: absolute;
+    width: 15%;
+    top: 45%;
+    left: 20%;
+    z-index: 10;
+    border: 3px solid gold;
+    display: none;  /* Hidden by default */
+}
+
+#floating-drawn-card.visible {
+    display: block;  /* Show when card is drawn */
+}
+
+.captured-card {
+    width: 20%;
+    margin: 2%;
+}
+
+#koikoi-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#koikoi-content {
+    background-color: #f7c7c7;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border: 3px solid white;
+}
+
+#koikoi-content h2 {
+    position: static;
+    top: auto;
+    left: auto;
+    margin: 0 0 20px 0;
+    font-size: 32px;
+}
+
+#koikoi-content p {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #000;
+}
+
+#koikoi-btn, #finish-btn {
+    appearance: none;
+    background-color: #fff;
+    color: #000;
+    font-family: 'Kaushan Script', cursive;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#koikoi-btn:hover, #finish-btn:hover {
+    background-color: #ee8b8b;
 }

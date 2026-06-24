@@ -320,3 +320,4 @@ const allcards = [
 ];
 
 export {allcards};
+

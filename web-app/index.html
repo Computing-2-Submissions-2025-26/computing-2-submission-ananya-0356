@@ -27,6 +27,7 @@
         <a1>Player Guide</a1>
         <button id="new-game-button">New Game</button>
         <button id="end-turn-button">End Turn</button>
+        <button id="pass-button">Pass</button>
     </aside>
 
     <main>
@@ -54,7 +55,18 @@
         <!-- Player 2 hand (top) -->
          <div id="player2-hand" class="player-hand"></div>
 
+         <img id="floating-drawn-card" src="" alt="drawn card">
     </main>
 
+    <div id="koikoi-modal" style="display: none;">
+        <div id="koikoi-content">
+            <h2>Yaku Complete!</h2>
+            <p id="yaku-list"></p>
+            <p id="current-score"></p>
+            <button id="koikoi-btn">Koi-Koi (Continue)</button>
+            <button id="finish-btn">Finish (End Game)</button>
+        </div>
+    </div>
+    
 </body>
 </html> 

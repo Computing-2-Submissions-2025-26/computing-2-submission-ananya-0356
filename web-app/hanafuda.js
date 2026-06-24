@@ -35,6 +35,65 @@ function dealCards(deck) {
 }
 
 /**
+ * Checks if card has specific tag.
+ * @param {string} tag - Tag to find
+ * @param {Object} card - Card object
+ * @returns {boolean} True if card has tag
+ */
+function hasTag(tag, card) {
+    return R.includes(tag, R.defaultTo([], R.prop("tags", card)));
+}
+
+/**
+ * Checks if player has specific bright cards.
+ * @param {string} tag - Tag to find
+ * @param {Array} cards - Captured cards
+ * @returns {boolean} True if has card with tag
+ */
+function hasBrightTag(tag, cards) {
+    return R.any(function (card) {
+        return hasTag(tag, card);
+    }, cards);
+}
+
+/**
+ * Calculates bright combination points.
+ * @param {Array} cards - Captured cards
+ * @returns {number} Points from bright combinations
+ */
+function calculateBrightPoints(cards) {
+    const hasCrane = hasBrightTag("crane", cards);
+    const hasMoon = hasBrightTag("moon", cards);
+    const hasCurtain = hasBrightTag("curtain", cards);
+    const hasPhoenix = hasBrightTag("phoenix", cards);
+    const hasRain = hasBrightTag("rain", cards);
+
+    if (hasCrane && hasMoon && hasCurtain && hasPhoenix && hasRain) {
+        return 20;
+    }
+    if (hasMoon && hasCurtain && hasPhoenix && hasRain) {
+        return 15;
+    }
+    if (hasMoon && hasCurtain && hasPhoenix) {
+        return 12;
+    }
+    if (hasCrane && hasMoon) {
+        return 10;
+    }
+
+    return 0;
+}
+
+/**
+ * Checks if card is bright category.
+ * @param {Object} card - Card object
+ * @returns {boolean} True if category is "bright"
+ */
+function isBright(card) {
+    return R.propEq("category", "bright", card);
+}
+
+/**
  * Checks if card has red poetry slip tag.
  * @param {Object} card - Card object
  * @returns {boolean} True if has "red poetry slips" tag
@@ -82,7 +141,17 @@ function isSeed(card) {
  * @returns {boolean} True if category is "chaff"
  */
 function isChaff(card) {
-    return R.propEq("category", "chaff", card);
+    return card.category === "chaff";
+
+}
+
+/**
+ * Counts bright category cards in captured cards.
+ * @param {Array} capturedCards - Cards the player has captured
+ * @returns {number} Count of bright category cards
+ */
+function countBrights(capturedCards) {
+    return R.length(R.filter(isBright, capturedCards));
 }
 
 /**
@@ -168,19 +237,26 @@ function checkInoShikaCho(cards) {
  */
 function calculateScore(cards) {
     let totalPoints = 0;
+
+    let brightPoints = calculateBrightPoints(cards);
+    totalPoints = totalPoints + brightPoints;
+
     let redCount = countRedPoetrySlips(cards);
     if (redCount >= 3) {
         totalPoints = totalPoints + 3 + (redCount - 3);
     }
 
+    let blueCount = countBluePoetrySlips(cards);
     if (blueCount >= 3) {
         totalPoints = totalPoints + 3 + (blueCount - 3);
     }
 
+    let poetryCount = countPoetrySlips(cards);
     if (poetryCount >= 5) {
         totalPoints = totalPoints + 5 + (poetryCount - 5);
     }
 
+    let seedCount = countSeeds(cards);
     if (seedCount >= 5) {
         totalPoints = totalPoints + 5 + (seedCount - 5);
     }
@@ -189,6 +265,7 @@ function calculateScore(cards) {
         totalPoints = totalPoints + 5;
     }
 
+    let chaffCount = countChaff(cards);
     if (chaffCount >= 10) {
         totalPoints = totalPoints + 1;
     }
@@ -246,6 +323,28 @@ function drawDeckCard(deck) {
  */
 function getCompletedYaku(cards) {
     let yaku = [];
+
+    let brightPoints = calculateBrightPoints(cards);
+    if (brightPoints > 0) {
+        let brightName = "";
+        if (brightPoints === 20) {
+            brightName = "All Five Brights";
+        } else if (brightPoints === 15) {
+            brightName = "Four Brights";
+        } else if (brightPoints === 12) {
+            brightName = "Three Lights";
+        } else if (brightPoints === 10) {
+            brightName = "Moon Viewing";
+        }
+
+        yaku = R.append(
+            {
+                name: brightName,
+                points: brightPoints
+            },
+            yaku
+        );
+    }
 
     let redCount = countRedPoetrySlips(cards);
     if (redCount >= 3) {
@@ -319,6 +418,8 @@ export {
     shuffleDeck,
     dealCards,
     calculateScore,
+    calculateBrightPoints,
+    countBrights,
     countRedPoetrySlips,
     countBluePoetrySlips,
     countPoetrySlips,
