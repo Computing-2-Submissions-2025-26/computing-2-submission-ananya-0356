@@ -2,9 +2,12 @@ import {calculateScore, getCompletedYaku } from "../hanafuda.js";
 import { allcards } from "../cards.js";
 import { strict as assert } from "assert";
 
+const card = (id) => allcards.find((c) => c.id === id);
+
 describe("Combined scoring", function () {
 
-    it("Moon Viewing and Red Poetry Slips score 13 points together", function () {
+    it("Moon Viewing and Red Poetry Slips score 13 points together", function ()
+    {
 
         const redCards = allcards
 

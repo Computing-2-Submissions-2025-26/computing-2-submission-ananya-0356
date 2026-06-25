@@ -2,7 +2,6 @@ import { calculateScore, getCompletedYaku } from "../hanafuda.js";
 import { allcards } from "../cards.js";
 import { strict as assert } from "assert";
 
-describe("Scoring System", function () {
     describe("Chaff Yaku", function () {
         it("should score 1 point for 10 chaff cards", function () {
             const chaffCards = allcards
@@ -24,4 +23,3 @@ describe("Scoring System", function () {
             assert.strictEqual(yaku[0].points, 1);
         });
     });
-});

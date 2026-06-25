@@ -425,7 +425,6 @@ function renderCapturedCards() {
     while (i < gameState.player2.captured.length) {
         const img = document.createElement("img");
         img.src = gameState.player2.captured[i].image;
-        img.title = gameState.player1.captured[i].name;
         img.style.width = "20%";
         img.style.margin = "2%";
         p2Captured.appendChild(img);
