@@ -11,4 +11,4 @@ Front card design was redone on Figma but came from the original game, some are 
 
 Other assets were designed by me. 
 
-Rules of hanafuda were implemented by me
+Rules of hanafuda were made by me as there are small edits from orginal game.
